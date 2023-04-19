@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,10 +21,12 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
+    private val CHANNEL_ID = "chanel_id"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        createNotificationChannel()
 
         val tvResult = findViewById<TextView>(R.id.tv_result)
         val btnFetchData = findViewById<Button>(R.id.btn_fetch_data)
@@ -38,18 +41,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(this, AlarmReceiver::class.java).let { intent ->
-            PendingIntent.getBroadcast(this, 0, intent, 0)
-        }
-        // Устанавливаем таймер на каждый час
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-//            System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR,
-            System.currentTimeMillis() + 60 * 1000,
-            AlarmManager.INTERVAL_HOUR,
-            alarmIntent
-        )
+//        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        val alarmIntent = Intent(this, AlarmReceiver::class.java).let { intent ->
+//            PendingIntent.getBroadcast(this, 0, intent, 0)
+//        }
+//        // Устанавливаем таймер на каждый час
+//        alarmManager.setRepeating(
+//            AlarmManager.RTC_WAKEUP,
+////            System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR,
+//            System.currentTimeMillis() + 60 * 1000,
+//            AlarmManager.INTERVAL_HOUR,
+//            alarmIntent
+//        )
 
     }
 
@@ -72,4 +75,32 @@ class MainActivity : AppCompatActivity() {
             tvResult.append(result)
         }
     }
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.channel_name)
+            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+
+            val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.notification_icon)
+                .setContentTitle("Курс рубля к сому")
+                .setContentText("Much longer text that cannot fit one line...")
+                // хз что за реализация, разницы не увидел
+//                .setStyle(NotificationCompat.BigTextStyle()
+//                    .bigText("Much longer text that cannot fit one line..."))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            notificationManager.notify(1, builder.build())
+        }
+    }
+
 }
