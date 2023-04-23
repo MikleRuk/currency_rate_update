@@ -15,8 +15,9 @@ class AlarmReceiver : BroadcastReceiver() {
 
     private fun showNotification(context: Context) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationChannelHelper = NotificationChannelHelper()
         // Создаем уведомление
-        val builder = NotificationCompat.Builder(context, "channel_id")
+        val builder = NotificationCompat.Builder(context, notificationChannelHelper.channelId)
             .setSmallIcon(R.drawable.notification_icon)
             .setContentTitle("Заголовок уведомления")
             .setContentText("Текст уведомления")
