@@ -23,10 +23,14 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     private val CHANNEL_ID = "chanel_id"
 
+    var result : String = " "
+    var kgsRate : Double? = 0.0
+    var dateNotif : String? = " "
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        createNotificationChannel()
+
 
         val tvResult = findViewById<TextView>(R.id.tv_result)
         val btnFetchData = findViewById<Button>(R.id.btn_fetch_data)
@@ -38,8 +42,12 @@ class MainActivity : AppCompatActivity() {
         btnFetchData.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 fetchDataFromNetwork(tvResult)
+                createNotificationChannel() // помести сюда создание нотификашки и заработало
             }
         }
+
+
+
 
 //        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 //        val alarmIntent = Intent(this, AlarmReceiver::class.java).let { intent ->
@@ -56,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private suspend fun fetchDataFromNetwork(tvResult: TextView) {
+     suspend fun fetchDataFromNetwork(tvResult: TextView)  {
         val currencyRates = runBlocking { fetchCurrencyRates() }
         tvResult.text = "Курс рубля к сому с"
 
@@ -64,13 +72,15 @@ class MainActivity : AppCompatActivity() {
         val dateFormatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         val date = dateFormatter.parse(currencyRates.date)
 
+         dateNotif = date.toString()
+
         // Find currency with isoCode = RUB
         val rubCurrency = currencyRates.currencyList.find { it.isoCode == "RUB" }
 
         // Convert ruble rate to KGS rate
-        val kgsRate = rubCurrency?.value?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
+        kgsRate = rubCurrency?.value?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
 
-        val result = "\n ${date?.let { dateFormatter.format(it) }} \n $kgsRate"
+        result = "\n ${date?.let { dateFormatter.format(it) }} \n $kgsRate"
         runOnUiThread {
             tvResult.append(result)
         }
@@ -93,8 +103,8 @@ class MainActivity : AppCompatActivity() {
 
             val builder = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.notification_icon)
-                .setContentTitle("Курс рубля к сому")
-                .setContentText("Much longer text that cannot fit one line...")
+                .setContentTitle("Курс рубля к сому ")
+                .setContentText("$result")
                 // хз что за реализация, разницы не увидел
 //                .setStyle(NotificationCompat.BigTextStyle()
 //                    .bigText("Much longer text that cannot fit one line..."))
