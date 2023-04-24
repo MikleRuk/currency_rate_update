@@ -26,3 +26,5 @@ class AlarmReceiver : BroadcastReceiver() {
         notificationManager.notify(1, builder.build())
     }
 }
+
+// подтверждение того, что Миша внес изменение в проект и это сохранилось и отобразилось
