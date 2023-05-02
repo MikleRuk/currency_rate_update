@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
         calendar.set(Calendar.HOUR_OF_DAY, 14)
-        calendar.set(Calendar.MINUTE, 4)
+        calendar.set(Calendar.MINUTE, 33)
         calendar.set(Calendar.SECOND, 0)
 
         // Если текущее время уже больше 12 часов, то установим уведомление на следующий день
@@ -77,9 +77,9 @@ class MainActivity : AppCompatActivity() {
         // Convert ruble rate to KGS rate
         val kgsRate = rubCurrency?.value?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
 
-        val s = "\n ${date?.let { dateFormatter.format(it) }} \n $kgsRate"
+        val result = "\n ${date?.let { dateFormatter.format(it) }} \n $kgsRate"
 
-        return s
+        return result
     }
 
     fun appendResult(textView: TextView, result: String) {
