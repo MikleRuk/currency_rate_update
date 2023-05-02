@@ -5,26 +5,46 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AlarmReceiver : BroadcastReceiver() {
+
+    var mainActivity = MainActivity()
+
     override fun onReceive(context: Context, intent: Intent) {
         // Здесь можно вызывать нужную вам функцию
         // Например, если вы хотите отобразить уведомление, то можно вызвать функцию показа уведомления
-        showNotification(context)
+
+        val scope = CoroutineScope(Dispatchers.Main)
+        scope.launch {
+            showNotification(context)
+        }
+
     }
 
-    private fun showNotification(context: Context) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    suspend fun showNotification(context: Context) {
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationChannelHelper = NotificationChannelHelper()
         // Создаем уведомление
         val builder = NotificationCompat.Builder(context, notificationChannelHelper.channelId)
             .setSmallIcon(R.drawable.notification_icon)
-            .setContentTitle("Заголовок уведомления")
-            .setContentText("Текст уведомления")
+            .setContentTitle("Курс рубля к сому с")
+            .setContentText(mainActivity.fetchDataFromNetwork())
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         // Показываем уведомление
         notificationManager.notify(1, builder.build())
+
+
+
     }
+
+//    fun getStringResult(result: String)
+
+
 }
 
 // подтверждение того, что Миша внес изменение в проект и это сохранилось и отобразилось

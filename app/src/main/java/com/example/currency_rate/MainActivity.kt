@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         val tvResult = findViewById<TextView>(R.id.tv_result)
         val btnFetchData = findViewById<Button>(R.id.btn_fetch_data)
 
+
         //думаю, тут надо будет отрефакторить и запихнуть в отдельный метод
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, AlarmReceiver::class.java)
@@ -34,8 +35,8 @@ class MainActivity : AppCompatActivity() {
 
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
-        calendar.set(Calendar.HOUR_OF_DAY, 12)
-        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.HOUR_OF_DAY, 14)
+        calendar.set(Calendar.MINUTE, 4)
         calendar.set(Calendar.SECOND, 0)
 
         // Если текущее время уже больше 12 часов, то установим уведомление на следующий день
@@ -52,20 +53,19 @@ class MainActivity : AppCompatActivity() {
         )
 
         lifecycleScope.launch(Dispatchers.IO) {
-            fetchDataFromNetwork(tvResult)
+            appendResult(tvResult, fetchDataFromNetwork())
         }
 
         btnFetchData.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                fetchDataFromNetwork(tvResult)
+                appendResult(tvResult, fetchDataFromNetwork())
             }
         }
 
     }
 
-    private suspend fun fetchDataFromNetwork(tvResult: TextView) {
+    suspend fun fetchDataFromNetwork(): String {
         val currencyRates = runBlocking { fetchCurrencyRates() }
-        tvResult.text = "Курс рубля к сому с"
 
         // Get date in format dd.MM.yyyy
         val dateFormatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
@@ -77,9 +77,17 @@ class MainActivity : AppCompatActivity() {
         // Convert ruble rate to KGS rate
         val kgsRate = rubCurrency?.value?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
 
-        val result = "\n ${date?.let { dateFormatter.format(it) }} \n $kgsRate"
+        val s = "\n ${date?.let { dateFormatter.format(it) }} \n $kgsRate"
+
+        return s
+    }
+
+    fun appendResult(textView: TextView, result: String) {
+        textView.text = "Курс рубля к сому с"
         runOnUiThread {
-            tvResult.append(result)
+            textView.append(result)
         }
     }
+
+}
 
