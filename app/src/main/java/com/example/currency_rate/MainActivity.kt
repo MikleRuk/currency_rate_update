@@ -4,9 +4,12 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,11 +20,37 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    val fragmentManager = supportFragmentManager
+
+    // ниже созданы 3 переменные и метод onAttachFragment для скрытия и отобраджения кнопок при появлении фрагмента
+
+    var back: Button? = null
+    var enter_amoun : Button? = null
+    var myFragment = calculate_frag()
+
+    override fun onAttachFragment(fragment: Fragment) {
+        super.onAttachFragment(fragment)
+        if (fragment is calculate_frag){
+            myFragment = fragment
+            back?.visibility = View.VISIBLE
+            enter_amoun?.visibility = View.GONE
+
+        }
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val notificationChannelHelper = NotificationChannelHelper()
         notificationChannelHelper.createNotificationChannel(this)
+
+
+
+        enter_amoun = findViewById(R.id.btn_calculate_frag)
+
+        back = findViewById<Button>(R.id.back_from_calc_frag)
+        back?.visibility = View.GONE
 
 
         val tvResult = findViewById<TextView>(R.id.tv_result)
@@ -88,6 +117,26 @@ class MainActivity : AppCompatActivity() {
             textView.append(result)
         }
     }
+
+    fun goToFragment(view: View) {
+
+        // по методу на кнопке  вызов фрагмента
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_holder, calculate_frag.newInstance()).commit()
+//        find_amount(fetchDataFromNetwork())
+    }
+
+
+    // по нажатию на кнопку Назад закрываем фрагмент, скрываем кнопку Назад и возвращаем кнопку Ввести сумму
+
+    fun close_frag(view: View) {
+        val fragment = fragmentManager.findFragmentById(R.id.fragment_holder)
+        if (fragment != null) {
+            fragmentManager.beginTransaction().remove(fragment).commit()
+            back?.visibility = View.GONE
+            enter_amoun?.visibility = View.VISIBLE
+        }
+    }
+
 
 }
 

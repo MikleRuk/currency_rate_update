@@ -7,6 +7,18 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/btn_calculate_frag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="goToFragment"
+        android:text="@string/Ввести_сумму"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.913" />
+
+    <Button
         android:id="@+id/btn_fetch_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,19 +28,44 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.672" />
+        app:layout_constraintVertical_bias="0.38" />
 
     <TextView
         android:id="@+id/tv_result"
-        android:textSize="30sp"
-        android:gravity="center"
         android:layout_width="300dp"
         android:layout_height="200dp"
+        android:gravity="center"
         android:text="@string/textview"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_fetch_data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.131" />
+
+    <FrameLayout
+        android:id="@+id/fragment_holder"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginTop="320dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/back_from_calc_frag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="close_frag"
+        android:text="@string/Назад"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.669" />
+        app:layout_constraintVertical_bias="0.913" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

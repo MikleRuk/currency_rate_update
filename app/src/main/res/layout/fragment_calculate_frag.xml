@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="220dp"
+    tools:context=".calculate_frag">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/calculation_end_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="250dp"
+        android:layout_marginTop="90dp"
+        android:hint="0.0000000"
+        android:text="" />
+
+
+    <EditText
+        android:id="@+id/edit_amount_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="90dp"
+        android:hint="Введите сумму"
+        android:inputType="number" />
+
+</FrameLayout>
