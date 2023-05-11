@@ -48,7 +48,7 @@
         android:id="@+id/fragment_holder"
         android:layout_width="match_parent"
         android:layout_height="230dp"
-        android:layout_marginTop="320dp"
+        android:layout_marginTop="328dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

@@ -20,6 +20,11 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+//    val edit_amount_tv = findViewById<EditText>(R.id.edit_amount_tv)
+//    val calculatoin_end_tv = findViewById<TextView>(R.id.calculation_end_tv)
+
+
+
     val fragmentManager = supportFragmentManager
 
     // ниже созданы 3 переменные и метод onAttachFragment для скрытия и отобраджения кнопок при появлении фрагмента
@@ -136,6 +141,15 @@ class MainActivity : AppCompatActivity() {
             enter_amoun?.visibility = View.VISIBLE
         }
     }
+
+//    suspend fun calcilation_of_the_entered_amount(){
+//        val amount_result = edit_amount_tv.text.toString()
+//        val result = (fetchDataFromNetwork().toInt() * amount_result.toInt()).toString()
+//        calculatoin_end_tv.setText(result)
+//
+//    }
+
+
 
 
 }
