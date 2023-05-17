@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class AlarmReceiver : BroadcastReceiver() {
 
-    var mainActivity = MainActivity()
+
 
     override fun onReceive(context: Context, intent: Intent) {
         // Здесь можно вызывать нужную вам функцию
@@ -26,6 +26,7 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
     suspend fun showNotification(context: Context) {
+        var mainActivity = MainActivity()
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationChannelHelper = NotificationChannelHelper()

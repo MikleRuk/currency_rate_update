@@ -1,6 +1,7 @@
 package com.example.currency_rate
 
 import android.os.Bundle
+import android.os.ProxyFileDescriptorCallback
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,8 +24,6 @@ import android.widget.Toast
  */
 class calculate_frag : Fragment() {
 
-
-    //    var mainActivity = MainActivity()
     private lateinit var edit_amount_tv: EditText
     private lateinit var calculation_end_tv: TextView
     private lateinit var calc_btn: Button
@@ -48,30 +49,51 @@ class calculate_frag : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         calc_btn.setOnClickListener {
-            val amount_result = edit_amount_tv.text.toString()
+            finding_the_value_of_the_sum { result ->
+                // Обновление calculation_end_tv.text в колбэке
+                calculation_end_tv.text = "$result"
+            }
+        }
+    }
+
+    private fun finding_the_value_of_the_sum(callback: (String) -> Unit) {
+        val amount_result = edit_amount_tv.text.toString()
+        val dataFetcher = requireActivity() as? DataFetcher
+        lifecycleScope.launch {
             try {
-                val result = (2 * amount_result.toInt()).toString()
-                calculation_end_tv.text = result
+                val result = ((dataFetcher!!.fetchDataFromNetwork().toIntOrNull() ?: 0) * amount_result.toInt()).toString()
+                callback(result) // Вызов колбэка с результатом
             } catch (e: NumberFormatException) {
                 Toast.makeText(requireContext(), "Некорректный ввод", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+
+
+//    private fun finding_the_value_of_the_sum(){
+//        var mainActivity = MainActivity()
+//        val amount_result = edit_amount_tv.text.toString()
+//        try {
+//            val result = (mainActivity.fetchDataFromNetwork()
+//                .toInt() * amount_result.toInt()).toString()
+//            calculation_end_tv.text = result
+//        } catch (e: NumberFormatException) {
+//            Toast.makeText(requireContext(), "Некорректный ввод", Toast.LENGTH_SHORT).show()
+//        }
+//    }
+
     companion object {
         @JvmStatic
         fun newInstance() = calculate_frag()
     }
 
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        calc_btn.setOnClickListener{
-//            val amount_result = edit_amount_tv.text.toString()
-//            val result = (2 * amount_result.toInt()).toString()
-//            calculation_end_tv.text = result
-//        }
-//
+
+//    private fun updateUI(amount_end_result: String) {
+//        // Обновление UI в основном потоке
+//        calculation_end_tv.text = "fafaf"
 //    }
+
+
 }
 

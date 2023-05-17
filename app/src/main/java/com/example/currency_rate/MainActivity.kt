@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity :AppCompatActivity(), DataFetcher  {
 
 //    val edit_amount_tv = findViewById<EditText>(R.id.edit_amount_tv)
 //    val calculatoin_end_tv = findViewById<TextView>(R.id.calculation_end_tv)
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    suspend fun fetchDataFromNetwork(): String {
+    override suspend fun fetchDataFromNetwork(): String {
         val currencyRates = runBlocking { fetchCurrencyRates() }
 
         // Get date in format dd.MM.yyyy
