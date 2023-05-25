@@ -31,6 +31,7 @@ class MainActivity :AppCompatActivity(), DataFetcher  {
 
     var back: Button? = null
     var enter_amoun : Button? = null
+    var btnFetchData : Button? = null
     var myFragment = calculate_frag()
 
     override fun onAttachFragment(fragment: Fragment) {
@@ -39,6 +40,9 @@ class MainActivity :AppCompatActivity(), DataFetcher  {
             myFragment = fragment
             back?.visibility = View.VISIBLE
             enter_amoun?.visibility = View.GONE
+            btnFetchData?.visibility = View.GONE
+
+
 
         }
     }
@@ -58,8 +62,9 @@ class MainActivity :AppCompatActivity(), DataFetcher  {
         back?.visibility = View.GONE
 
 
+
         val tvResult = findViewById<TextView>(R.id.tv_result)
-        val btnFetchData = findViewById<Button>(R.id.btn_fetch_data)
+        btnFetchData = findViewById<Button>(R.id.btn_fetch_data)
 
 
         //думаю, тут надо будет отрефакторить и запихнуть в отдельный метод
@@ -90,7 +95,7 @@ class MainActivity :AppCompatActivity(), DataFetcher  {
             appendResult(tvResult, fetchDataFromNetwork())
         }
 
-        btnFetchData.setOnClickListener {
+        btnFetchData?.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 appendResult(tvResult, fetchDataFromNetwork())
             }
@@ -139,6 +144,7 @@ class MainActivity :AppCompatActivity(), DataFetcher  {
             fragmentManager.beginTransaction().remove(fragment).commit()
             back?.visibility = View.GONE
             enter_amoun?.visibility = View.VISIBLE
+            btnFetchData?.visibility = View.VISIBLE
         }
     }
 
