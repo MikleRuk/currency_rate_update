@@ -52,17 +52,23 @@ class calculate_frag : Fragment() {
             finding_the_value_of_the_sum { result ->
                 // Обновление calculation_end_tv.text в колбэке
                 calculation_end_tv.text = "$result"
+                return@finding_the_value_of_the_sum "$result"
             }
         }
     }
 
-    private fun finding_the_value_of_the_sum(callback: (String) -> Unit) {
+    private fun finding_the_value_of_the_sum(callback: (String) -> String){
+        val mainActivity = MainActivity()
         val amount_result = edit_amount_tv.text.toString()
         val dataFetcher = requireActivity() as? DataFetcher
         lifecycleScope.launch {
             try {
-                val result = ((dataFetcher!!.fetchDataFromNetwork().toIntOrNull() ?: 0) * amount_result.toInt()).toString()
-                callback(result) // Вызов колбэка с результатом
+                val kgsRate = mainActivity.fetchDataFromNetwork()   //сюда приходит значение  "\n 25.05.2023 \n 1.0907"
+                val regex =Regex("""\d+\.\d+$""")
+                val regex_kgsRate = regex.find(kgsRate)
+                val end_regex_kgsRate = regex_kgsRate?.value   // сюда приходит тперь "1.0907"
+                val result = (end_regex_kgsRate?.toDouble()?.times(amount_result.toDouble())).toString() //сюда приходит при умножении на 1 "1.0907"
+                val processedResult = callback(result) // Вызов колбэка с результатом
             } catch (e: NumberFormatException) {
                 Toast.makeText(requireContext(), "Некорректный ввод", Toast.LENGTH_SHORT).show()
             }
